@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/add1.png</file>
+        <file>images/delete1.png</file>
+        <file>images/edit.png</file>
+        <file>images/arrows.png</file>
+        <file>images/pix.jpg</file>
+        <file>images/artem.jpg</file>
+        <file>images/vladimir.jpg</file>
+        <file>images/anonim.jpg</file>
+        <file>images/eye.png</file>
+        <file>images/search_.png</file>
+        <file>images/clear.png</file>
+        <file>images/alexander.jpg</file>
+        <file>images/json.png</file>
+    </qresource>
+</RCC>
