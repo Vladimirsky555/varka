@@ -27,7 +27,6 @@ public:
     void fillBoxes();
     bool check_index(int index);
 
-
 private slots:
     void on_addVarka_clicked();
     void on_tableView_clicked(const QModelIndex &index);

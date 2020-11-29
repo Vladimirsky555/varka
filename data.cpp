@@ -236,6 +236,44 @@ void Data::setEnd(QTime value)
     this->end = value;
 }
 
+QString Data::secondsToString()
+{
+    QString result;
+    QTime timeZero = QTime(0, 0, 0);
+    float timeDelta = this->start.secsTo(this->end);
+
+    if(timeDelta < 0){
+        float timeDelta1 = 86400 - timeZero.secsTo(this->start);
+        float timeDelta2 = timeZero.secsTo(this->end);
+        timeDelta = timeDelta1 + timeDelta2;
+    }
+
+    int a; //числитель
+    int b; //знаменатель int
+    float d;//знаменатель float
+
+    //округляем
+    int c = (timeDelta/3600) * 100;
+    //получаем числитель
+    a = (c / 100) % 100;
+    //получем знаменатель
+    b = (c % 100) * 0.6;
+    d = (c % 100) * 0.6;
+
+    //Поправка, для точного округления
+    if(d - b > 0.5){
+        b += 1;
+    }
+
+    if(b < 10){
+        result = QString::number(a) + ":0" + QString::number(b);
+    } else {
+        result = QString::number(a) + ":" + QString::number(b);
+    }
+
+    return result;
+}
+
 
 int Data::DimensionFrom()
 {
@@ -257,6 +295,20 @@ void Data::setDimensionTo(int value)
     this->dimensionTo = value;
 }
 
+QString Data::dimensionsToString()
+{
+    QString result;
+
+    if(this->dimensionFrom != 0){
+        result = "(" + QString::number(this->dimensionFrom) + "-" +
+                QString::number(this->dimensionTo) + ")" +
+                QString::number(this->temperature) + "°С";
+    } else {
+        result = "нет";
+    }
+    return result;
+}
+
 float Data::Temperature()
 {
     return this->temperature;
@@ -275,6 +327,13 @@ QString Data::Description()
 void Data::setDescription(QString text)
 {
     this->description = text;
+}
+
+QString Data::someText()
+{
+    QString text;
+    text = "0 - 50, 1 - 36, 2 - 24, 3 - 16, 4 - 12. Temp - 22°С";
+    return text;
 }
 
 QString Data::Report()

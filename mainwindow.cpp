@@ -62,7 +62,7 @@ void MainWindow::createUI()
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
-    ui->tableView->horizontalHeader()->setSectionResizeMode(14, QHeaderView::Stretch);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(13, QHeaderView::Stretch);
     ui->tableView->resizeColumnToContents(2);
     ui->tableView->resizeColumnToContents(5);
     ui->tableView->resizeColumnToContents(6);
@@ -70,7 +70,7 @@ void MainWindow::createUI()
     ui->tableView->resizeColumnToContents(9);
     ui->tableView->resizeColumnToContents(10);
     ui->tableView->resizeColumnToContents(11);
-    ui->tableView->resizeColumnToContents(12);	
+    ui->tableView->resizeColumnToContents(12);
 	
     ui->tableView->setColumnHidden(0, true);
     ui->tableView->setColumnHidden(3, true);
@@ -250,9 +250,11 @@ void MainWindow::clearBoxes()
 
 void MainWindow::ExportToJSON()
 {
+    QJsonArray textsArray = m_currentJsonObject["var"].toArray();
     QJsonObject textObject;
 
-    for(int i = 0; i < M->getCount(); i++){
+    for(int i = 0; i < M->getCount(); i++)
+    {
         textObject["id"] = QString::number(i+1);
         textObject["code_all"] = QString::number(M->getItemById(i)->Code_all());
         textObject["code_year"] = QString::number(M->getItemById(i)->Code_year());
@@ -267,10 +269,11 @@ void MainWindow::ExportToJSON()
         textObject["dimensionTo"] = M->getItemById(i)->DimensionTo();
         textObject["temperature"] = M->getItemById(i)->Temperature();
         textObject["description"] = M->getItemById(i)->Description();
-        QJsonArray textsArray = m_currentJsonObject["var"].toArray();
+
         textsArray.append(textObject);
-        m_currentJsonObject["var"] = textsArray;
     }
+
+    m_currentJsonObject["var"] = textsArray;
 
     // С помощью диалогового окна получаем имя файла с абсолютным путём
        QString saveFileName = QFileDialog::getSaveFileName(this,
@@ -287,6 +290,20 @@ void MainWindow::ExportToJSON()
        }
 
        // Записываем текущий объект Json в файл
-       jsonFile.write(QJsonDocument(m_currentJsonObject).toJson(QJsonDocument::Indented));
+       //jsonFile.write(QJsonDocument(m_currentJsonObject).toJson(QJsonDocument::Indented));
+
+       //Чтобы не править json-файл вручную перед каждой загрузкой на сервер
+       jsonFile.write("[");
+       for(int i = 0; i < textsArray.size(); i++)
+       {
+           jsonFile.write(QJsonDocument(textsArray.at(i).toObject()).toJson(QJsonDocument::Indented));
+
+           if(i < textsArray.size()-1){
+               jsonFile.write(",");
+           }
+       }
+       jsonFile.write("]");
+
        jsonFile.close();   // Закрываем файл
 }
+

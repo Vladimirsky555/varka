@@ -101,6 +101,36 @@
                </item>
                <item>
                 <widget class="QDateEdit" name="dateEdit_m">
+                 <property name="wrapping">
+                  <bool>true</bool>
+                 </property>
+                 <property name="frame">
+                  <bool>true</bool>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="readOnly">
+                  <bool>false</bool>
+                 </property>
+                 <property name="buttonSymbols">
+                  <enum>QAbstractSpinBox::UpDownArrows</enum>
+                 </property>
+                 <property name="specialValueText">
+                  <string/>
+                 </property>
+                 <property name="accelerated">
+                  <bool>true</bool>
+                 </property>
+                 <property name="correctionMode">
+                  <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+                 </property>
+                 <property name="showGroupSeparator" stdset="0">
+                  <bool>true</bool>
+                 </property>
+                 <property name="displayFormat">
+                  <string>dd.MM.yyyy</string>
+                 </property>
                  <property name="calendarPopup">
                   <bool>true</bool>
                  </property>
@@ -121,7 +151,14 @@
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="cbxType_m"/>
+                <widget class="QComboBox" name="cbxType_m">
+                 <property name="iconSize">
+                  <size>
+                   <width>16</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>
@@ -142,7 +179,14 @@
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="cbxPerson_m"/>
+                <widget class="QComboBox" name="cbxPerson_m">
+                 <property name="iconSize">
+                  <size>
+                   <width>16</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>
@@ -159,7 +203,14 @@
                 </widget>
                </item>
                <item>
-                <widget class="QComboBox" name="cbxDensity_m"/>
+                <widget class="QComboBox" name="cbxDensity_m">
+                 <property name="iconSize">
+                  <size>
+                   <width>16</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </widget>
                </item>
               </layout>
              </item>
@@ -194,6 +245,12 @@
                <normalon>:/images/arrows.png</normalon>
               </iconset>
              </property>
+             <property name="iconSize">
+              <size>
+               <width>16</width>
+               <height>20</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item>
@@ -219,6 +276,12 @@
                <normalon>:/images/json.png</normalon>
               </iconset>
              </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item>
@@ -237,6 +300,12 @@
                <normalon>:/images/clear.png</normalon>
               </iconset>
              </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
             </widget>
            </item>
            <item>
@@ -248,6 +317,12 @@
               <iconset>
                <normalon>:/images/search_.png</normalon>
               </iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -343,6 +418,33 @@
        <font>
         <pointsize>11</pointsize>
        </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <property name="midLineWidth">
+       <number>4</number>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>10</width>
+        <height>10</height>
+       </size>
+      </property>
+      <property name="gridStyle">
+       <enum>Qt::SolidLine</enum>
+      </property>
+      <property name="sortingEnabled">
+       <bool>false</bool>
       </property>
      </widget>
     </item>

@@ -64,21 +64,22 @@ public:
 
     QTime Start();
     void setStart(QTime value);
-
     QTime End();
     void setEnd(QTime value);
+    QString secondsToString();
 
     int DimensionFrom();
     void setDimensionFrom(int value);
-
     int DimensionTo();
     void setDimensionTo(int value);
+    QString dimensionsToString();
 
     float Temperature();
     void setTemperature(float value);
 
     QString Description();
     void setDescription(QString text);
+    QString someText();
 
     //Для поиска по тем параметрам, по которым поиск не ведётся
    QString Report();

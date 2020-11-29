@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QSqlTableModel>
+#include <QTime>
 
 
 #include "data.h"
