@@ -18,6 +18,7 @@ class MainWindow : public QMainWindow
 
     Model *M;
     QJsonObject m_currentJsonObject;
+    QStringList lst;//Список варщиков
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -26,6 +27,8 @@ public:
     void createUI();
     void fillBoxes();
     bool check_index(int index);
+    void printList();
+
 
 private slots:
     void on_addVarka_clicked();
@@ -35,6 +38,7 @@ private slots:
     void on_edtPattern_m_textChanged(const QString &str);
     void clearBoxes();
     void ExportToJSON();
+
 
 signals:
     void sendIndextoModel(QModelIndex index);

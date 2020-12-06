@@ -14,28 +14,32 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setWindowTitle("Таблица учёта варок");
 
+    //Создаём модель
     M = new Model(this);
     M->setEditStrategy(QSqlTableModel::OnFieldChange);
-    ui->addVarka->setEnabled(false);//защита от вылета
+
+    //Устанавливаем текущую дату в поисковике
     ui->dateEdit_m->setDate(QDate::currentDate());
 
+    //Картинка на главный экран
     QPixmap pix(":/images/pix.jpg");
     ui->label_pix->setPixmap(pix.scaledToWidth(250));
 
-    //Связываем кнопку с событием
+    //Оформление кнопки для очистки перед новым поиском
     ui->btnClear->setDefaultAction(ui->actionClear);
-    //Вызываем слот при нажатии на кнопку
     connect(ui->actionClear, SIGNAL(triggered()),
             this, SLOT(clearBoxes()));
 
+    //Оформление кнопки для экспорта в JSON
     ui->btnExportToJSON->setDefaultAction(ui->actionExportToJSON);//привязали к toolbutton
     connect(ui->actionExportToJSON, SIGNAL(triggered()),this, SLOT(ExportToJSON()));
     QPixmap pExp(":/images/json.png");
     ui->actionExportToJSON->setIcon(QIcon(pExp));
     ui->btnExportToJSON->setEnabled(false);
 
-    fillBoxes();
-    createUI();
+    printList();//Выводим список варок в представление
+    fillBoxes();//Заполняем комбобоксы и получаем список варщиков для поиска
+    createUI();//Создаём представление
 }
 
 MainWindow::~MainWindow()
@@ -56,6 +60,7 @@ void MainWindow::createUI()
     connect(this, SIGNAL(sendPattern(QString)),
             M, SLOT(acceptPattern(QString)));
 
+    //Добавляем события в представление
     ui->tableView->addActions(M->allActions);
     ui->tableView->setContextMenuPolicy(Qt::ActionsContextMenu);
 
@@ -78,6 +83,7 @@ void MainWindow::createUI()
     ui->tableView->setAlternatingRowColors(false);
 }
 
+//Добавляем новую варку
 void MainWindow::on_addVarka_clicked()
 {
     M->addData();
@@ -90,9 +96,7 @@ void MainWindow::on_tableView_clicked(const QModelIndex &index)
 
 void MainWindow::on_btnAll_clicked()
 {
-    ui->btnExportToJSON->setEnabled(true);
-    ui->addVarka->setEnabled(true);
-    M->selectAll();
+    printList();
 }
 
 void MainWindow::on_btnSearch_clicked()
@@ -125,21 +129,7 @@ void MainWindow::on_btnSearch_clicked()
         flag = 3;
     }
 
-    if(ui->cbxPerson_m->currentIndex() == 0){
-        person = "---";
-    } else if(ui->cbxPerson_m->currentIndex() == 1){
-        person = "Артём";
-    }else if(ui->cbxPerson_m->currentIndex() == 2){
-        person = "Александр";
-    }else if(ui->cbxPerson_m->currentIndex() == 3){
-        person = "Владимир";
-    }else if(ui->cbxPerson_m->currentIndex() == 4){
-        person = "Яков";
-    }else if(ui->cbxPerson_m->currentIndex() == 5){
-        person = "Бато";
-    } else if(ui->cbxPerson_m->currentIndex() == 6){
-        person = "Аноним";
-    }
+    person = lst.at(ui->cbxPerson_m->currentIndex());
 
     if(ui->cbxType_m->currentIndex() == 0){
         type = "---";
@@ -194,13 +184,8 @@ void MainWindow::on_btnSearch_clicked()
 
 void MainWindow::fillBoxes()
 {
-    ui->cbxPerson_m->addItem("---");
-    ui->cbxPerson_m->addItem("Артём");
-    ui->cbxPerson_m->addItem("Александр");
-    ui->cbxPerson_m->addItem("Владимир");
-    ui->cbxPerson_m->addItem("Яков");
-    ui->cbxPerson_m->addItem("Бато");
-    ui->cbxPerson_m->addItem("Аноним");
+    lst = M->defineLstPerson();//получаем список варщиков
+    ui->cbxPerson_m->addItems(lst);
 
     ui->cbxDensity_m->addItem("-------");
     ui->cbxDensity_m->addItem("0 (bandage)");
@@ -224,6 +209,14 @@ bool MainWindow::check_index(int index)
     }
 
     return true;
+}
+
+//Вывод списка с варками в представление
+void MainWindow::printList()
+{
+    ui->btnExportToJSON->setEnabled(true);
+    ui->addVarka->setEnabled(true);
+    M->selectAll();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

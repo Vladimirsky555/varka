@@ -15,6 +15,7 @@ Model::Model(QObject *parent) : QSqlTableModel(parent)
     items = new QList<Data*>;
     s_items = new QList<Data*>;
 
+
     //Список экшенов
     {
         QAction *A = actShowItem = new QAction(tr("Просмотр"), this);
@@ -94,6 +95,23 @@ Data *Model::getItemById(int id)
     return items->at(id);
 }
 
+//Список варщиков определяем из данных
+QStringList Model::defineLstPerson()
+{
+    lst.append("---");
+
+    for(int i = 0; i < items->count(); i++)
+    {
+        if(!lst.contains(items->at(i)->Person())){
+            lst.push_back(items->at(i)->Person());
+        } else {
+            continue;
+        }
+    }
+
+    return lst;
+}
+
 
 bool Model::checkReport(QString pattern, QString report)
 {
@@ -122,14 +140,14 @@ void Model::addData()
     item->setCode_all(items->at(0)->Code_all() + 1);//Выставляю следующий номер
     item->setCode_year(items->at(0)->Code_year() + 1);
 
-    Dialog d(item, true);
+    Dialog d(item, lst, true);
     d.save();
     d.exec();
 
     //Защита от добавления варки, если не обозначен варщик
     //Добавиться может только варка, где есть конкретный варщик, а не
     //абстрактный
-    if(item->Person() == "---"){
+    if(item->Type() == "---"){
         delete item;
         return;
     }
@@ -139,6 +157,7 @@ void Model::addData()
 
     save_to_db(item);//В базу данных
     addItem(item);//В модель
+    selectAll();
 }
 
 void Model::setItems()
@@ -159,7 +178,7 @@ void Model::edit_item()
     Data *item = getItem(currentIndex);
     if(!item)return;
 
-    Dialog d(item, false);
+    Dialog d(item, lst, false);
     d.save();
     d.exec();
     items->replace(currentIndex.row(), item);

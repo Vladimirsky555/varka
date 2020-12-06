@@ -15,15 +15,17 @@ class Dialog : public QDialog
 
     Data *item;
     bool edit; //true - добавление, false - редактирование
+    QStringList lst;
 
 public:
-    Dialog(Data *item, bool edit, QWidget *parent = 0);
+    Dialog(Data *item, QStringList lst,bool edit, QWidget *parent = 0);
     ~Dialog();
 
     void load();
     void save();
 
     void fillBoxes();
+    int personId();//Возвращает номер варщика в списке
 
 private slots:
     void on_btnCancel_clicked();

@@ -4,7 +4,7 @@
 #include <QIntValidator>
 
 
-Dialog::Dialog(Data *item, bool edit, QWidget *parent) :
+Dialog::Dialog(Data *item, QStringList lst, bool edit, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Dialog)
 {
@@ -12,6 +12,7 @@ Dialog::Dialog(Data *item, bool edit, QWidget *parent) :
 
     this->item = item;
     this->edit = edit;
+    this->lst = lst;
 
     fillBoxes();
 
@@ -23,6 +24,7 @@ Dialog::Dialog(Data *item, bool edit, QWidget *parent) :
 
     if(this->edit){
         setWindowTitle("Добавление варки");
+        ui->cbxPerson->setEditable(true);
         ui->dateEdit->setDate(QDate::currentDate());
         ui->edtCode_all->setText(QString::number(item->Code_all()));
         ui->edtCode_year->setText(QString::number(item->Code_year()));
@@ -49,21 +51,7 @@ void Dialog::load()
     ui->edtCode_year->setText(QString::number(item->Code_year()));
     ui->dateEdit->setDateTime(item->Date());
 
-    if(item->Person() == "---"){
-        ui->cbxPerson->setCurrentIndex(0);
-    } else if(item->Person() == "Артём"){
-        ui->cbxPerson->setCurrentIndex(1);
-    }else if(item->Person() == "Александр"){
-        ui->cbxPerson->setCurrentIndex(2);
-    }else if(item->Person() == "Владимир"){
-        ui->cbxPerson->setCurrentIndex(3);
-    }else if(item->Person() == "Яков"){
-        ui->cbxPerson->setCurrentIndex(4);
-    }else if(item->Person() == "Бато"){
-        ui->cbxPerson->setCurrentIndex(5);
-    } else if(item->Person() == "Аноним"){
-        ui->cbxPerson->setCurrentIndex(6);
-    }
+    ui->cbxPerson->setCurrentIndex(personId());
 
     if(item->Density() == 0){
         ui->cbxDensity->setCurrentIndex(0);
@@ -109,20 +97,10 @@ void Dialog::save()
     item->setCode_year(ui->edtCode_year->text().toInt());
     item->setDate(ui->dateEdit->dateTime());
 
-    if(ui->cbxPerson->currentIndex() == 0){
-        item->setPerson("---");
-    } else if(ui->cbxPerson->currentIndex() == 1){
-        item->setPerson("Артём");
-    }else if(ui->cbxPerson->currentIndex() == 2){
-        item->setPerson("Александр");
-    }else if(ui->cbxPerson->currentIndex() == 3){
-        item->setPerson("Владимир");
-    }else if(ui->cbxPerson->currentIndex() == 4){
-        item->setPerson("Яков");
-    }else if(ui->cbxPerson->currentIndex() == 5){
-        item->setPerson("Бато");
-    } else if(ui->cbxPerson->currentIndex() == 6){
-        item->setPerson("Аноним");
+    if(ui->cbxPerson->currentIndex() != 0){
+        item->setPerson(lst.at(ui->cbxPerson->currentIndex()));
+    } else {
+        item->setPerson(ui->cbxPerson->currentText());
     }
 
     if(ui->cbxDensity->currentIndex() == 0){
@@ -176,13 +154,7 @@ void Dialog::on_btnAdd_clicked()
 
 void Dialog::fillBoxes()
 {
-    ui->cbxPerson->addItem("---");
-    ui->cbxPerson->addItem("Артём");
-    ui->cbxPerson->addItem("Александр");
-    ui->cbxPerson->addItem("Владимир");
-    ui->cbxPerson->addItem("Яков");
-    ui->cbxPerson->addItem("Бато");
-    ui->cbxPerson->addItem("Аноним");
+    ui->cbxPerson->addItems(lst);
 
     ui->cbxDensity->addItem("-------");
     ui->cbxDensity->addItem("0 (bandage)");
@@ -197,5 +169,16 @@ void Dialog::fillBoxes()
     ui->cbxType->addItem("Yes");
     ui->cbxType->addItem("Exclusive");
     ui->cbxType->addItem("Sugar");
+}
+
+int Dialog::personId()
+{
+    for(int i = 0; i < lst.count(); i++){
+        if(item->Person() == lst.at(i)){
+            return i;
+        }
+    }
+
+    return 0;
 }
 

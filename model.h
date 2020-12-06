@@ -22,6 +22,7 @@ class Model : public QSqlTableModel
     QString pattern;//для подсветки поиска по комментарию
 
     QString report;//Текст отчёта о варке
+    QStringList lst;//список варщиков
 
 public:
     //Экшены
@@ -37,6 +38,7 @@ public:
     void selectAll();
     int getCount();
     Data* getItemById(int id);
+    QStringList defineLstPerson();
 
     bool checkReport(QString pattern, QString report);
     void search(QDate date, bool _date, int flag, QString person, bool _person,
@@ -62,7 +64,6 @@ public slots:
     void acceptIndexfromView(QModelIndex index);
     void acceptPattern(QString pattern);//для подстветки
 
-
 private slots:
     bool save_to_db(Data *item);
     bool update_in_db(Data *item);
@@ -75,9 +76,6 @@ protected:
     virtual QVariant    dataBackground(const QModelIndex &index) const;//Заливка ячейки
     virtual Data *getItem(const QModelIndex &index)const;
     virtual QVariant    dataToolTip(const QModelIndex &I) const;
-    //    virtual QVariant    dataForeground(const QModelIndex &I) const;
-    //    virtual QVariant    dataFont(const QModelIndex &I) const;
-
 
     // QSqlTableModel interface
 public:
